@@ -3,7 +3,9 @@
 目前仍在完善中。
 
 # 效果图
+
 ![Sample Screenshots][1]
+
 效果图，第一个Activity中布局文件为TextView和ListView，第二个Activity中为
 Fragment，主要测试Activity、Fragment、Adapter中的注入。
 
@@ -11,7 +13,7 @@ Fragment，主要测试Activity、Fragment、Adapter中的注入。
 
 ### In Activity
 
-```java```
+```java
 @InjectView(R.layout.activity_main)
 public class MainActivity extends Activity
 {
@@ -28,10 +30,11 @@ public class MainActivity extends Activity
 		super.onCreate(savedInstanceState);
 		HyViewInjector.inject(this);
 
-```java```
+```
 
 ### In Fragment
-```java```
+
+```java
 public class SecondActFragment extends Fragment
 {
 	@InjectView(R.id.id_tv_title)
@@ -48,12 +51,13 @@ public class SecondActFragment extends Fragment
 	}
 
 }
-```java```
+```
 
 
 
 ### In Adapter
-```java```
+
+```java
 package com.zhy.sample.viewinjector;
 
 import java.util.List;
@@ -110,7 +114,7 @@ public class BeanAdaper extends ArrayAdapter<Bean>
 
 }
 
-```java```
+```
 
 #启用编译时注解
 ![Sample Screenshots][2]
@@ -120,6 +124,6 @@ public class BeanAdaper extends ArrayAdapter<Bean>
 
 [我的博客地址][3]
 
-[1]: https://github.com/hongyangAndroid/Android-ProgressBarWidthNumber/blob/master/sample_zhy_progressbar/Screenshot_.gif
-[2]: https://github.com/hongyangAndroid/Android-ProgressBarWidthNumber/blob/master/sample_zhy_progressbar/Screenshot2.png
+[1]: https://github.com/hongyangAndroid/Android-HyViewInject/blob/master/sample_zhy_viewInjector/screen_shot.gif
+[2]: https://github.com/hongyangAndroid/Android-HyViewInject/blob/master/sample_zhy_viewInjector/enbled.gif
 [3]: http://blog.csdn.net/lmj623565791

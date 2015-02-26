@@ -32,11 +32,11 @@ base-adapter-helper 是对我们传统的BaseAdapter的ViewHolder的模式的一
 `helper.setImageUrl(R.id.iv_photo, item.getPhotoUrl());`
 
 ###2. 总体设计
-####2.1. 总体设计图  
-ViewHolder Pattern
-	![ViewHolder Pattern](https://github.com/hongyangAndroid/Android-HyViewInject/blob/master/sample_zhy_viewInjector/testmd/viewholderpattern.png)  
-总体设计图
-	![总体设计图](https://github.com/hongyangAndroid/Android-HyViewInject/blob/master/sample_zhy_viewInjector/testmd/base-adapter-helprt.png)  
+####2.1 总体设计图  
+#####2.1.1 ViewHolder Pattern
+![ViewHolder Pattern](https://github.com/hongyangAndroid/Android-HyViewInject/blob/master/sample_zhy_viewInjector/testmd/viewholderpattern.png)  
+#####2.1.2 总体设计图
+![总体设计图](https://github.com/hongyangAndroid/Android-HyViewInject/blob/master/sample_zhy_viewInjector/testmd/base-adapter-helprt.png)  
 由于base-adapter-helper本质上仍然是ViewHolder Pattern，上面贴出base-adapter-helper的总体设计图和ViewHolder Pattern的设计图，通过两图的比较，可以看出base-adapter-helper对传统的`BaseAdapter`进行了初步的实现（`QuickAdapter`），并且仅公布出`convert()`方法，在`convert()`中可以拿到`BaseAdapterHelper`,`BaseAdapterHelper`就相当于`ViewHolder`，但其内部提供了大量的辅助方法，用于设置View上的数据，甚至是事件等。
 
 

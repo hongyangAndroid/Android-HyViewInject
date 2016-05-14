@@ -1,6 +1,7 @@
 # Android-HyViewInject
-一个Android的ViewInject的注入库，基于编译时注解解析，不会影响性能。
-目前仍在完善中。
+一个Android的ViewInject的注入库，基于编译时注解的例子。
+
+仅仅是个例子，不要使用的到项目中，如果需要请使用butterknife.
 
 # 效果图
 

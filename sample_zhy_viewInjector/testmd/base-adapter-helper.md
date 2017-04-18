@@ -4,11 +4,11 @@ base-adapter-helper 源码分析
 > 项目地址：[base-adapter-helper](https://github.com/JoanZapata/base-adapter-helper)    
 > 分析者：[hongyangAndroid](https://github.com/hongyangAndroid)
 
-###1. 功能介绍  
-####1.1. base-adapter-helper  
+### 1. 功能介绍  
+#### 1.1. base-adapter-helper  
 base-adapter-helper 是对我们传统的BaseAdapter的ViewHolder的模式的一个抽象。主要功能就是简化我们在书写AbsListView，例如ListView,GridView的Adapter的代码。
 
-####1.2 基本使用
+#### 1.2 基本使用
 ```java
  mListView.setAdapter(mAdapter = new QuickAdapter<Bean>(
 			MainActivity.this, R.layout.item_list, mDatas)
@@ -26,22 +26,22 @@ base-adapter-helper 是对我们传统的BaseAdapter的ViewHolder的模式的一
 	});
 ```
 
-####1.3 特点
+#### 1.3 特点
 1. 提供QucikAdapter，极大简化我们的代码。
 2. BaseAdapterHelper中封装了大量用于为View操作的辅助方法，例如从网络加载图片：
 `helper.setImageUrl(R.id.iv_photo, item.getPhotoUrl());`
 
-###2. 总体设计
-####2.1 总体设计图  
-#####2.1.1 ViewHolder Pattern
+### 2. 总体设计
+#### 2.1 总体设计图  
+##### 2.1.1 ViewHolder Pattern
 ![ViewHolder Pattern](https://github.com/hongyangAndroid/Android-HyViewInject/blob/master/sample_zhy_viewInjector/testmd/viewholderpattern.png)  
-#####2.1.2 总体设计图
+##### 2.1.2 总体设计图
 ![总体设计图](https://github.com/hongyangAndroid/Android-HyViewInject/blob/master/sample_zhy_viewInjector/testmd/base-adapter-helprt.png)  
 由于base-adapter-helper本质上仍然是ViewHolder Pattern，上面贴出base-adapter-helper的总体设计图和ViewHolder Pattern的设计图，通过两图的比较，可以看出base-adapter-helper对传统的`BaseAdapter`进行了初步的实现（`QuickAdapter`），并且仅公布出`convert()`方法，在`convert()`中可以拿到`BaseAdapterHelper`,`BaseAdapterHelper`就相当于`ViewHolder`，但其内部提供了大量的辅助方法，用于设置View上的数据，甚至是事件等。
 
 
-###3. 详细设计
-####3.1 类关系图
+### 3. 详细设计
+#### 3.1 类关系图
 ![类关系图](https://github.com/hongyangAndroid/Android-HyViewInject/blob/master/sample_zhy_viewInjector/testmd/base-adapter-helper-ClassDiagram.jpg)  
 这是 base-adapter-helper 框架的主要类关系图    
 
@@ -52,12 +52,12 @@ base-adapter-helper 是对我们传统的BaseAdapter的ViewHolder的模式的一
 5. BaseAdapterHelper中封装了常用View的赋值，以及事件监听的方法，方便操作。并且赋值方法都有采用链式编程，更加方便书写。
 6. 扩展BaseAdapterHelper可以继承BaseAdapterHelper，编写Adapter时继承BaseQuickAdapter,传入自定义的类作为H泛型。 
 
-###3.2 核心类源码分析
-####3.2.1 BaseQucikAdapter.java 
+### 3.2 核心类源码分析
+#### 3.2.1 BaseQucikAdapter.java 
 该类继承自BaseAdapter，完成BaseAdapter中部分通用抽象方法的编写，类似`ArrayAdapter`.
 该类声明了两个泛型，一个是我们的Bean（T），一个是`BaseAdapterHelper(H)`主要用于扩展`BaseAdapterHelper`时使用。
 
-#####(1).构造方法 
+##### (1).构造方法 
 ```java
 
     public BaseQuickAdapter(Context context, int layoutResId) {
@@ -70,7 +70,7 @@ base-adapter-helper 是对我们传统的BaseAdapter的ViewHolder的模式的一
     }
 ```
 因为我们的Bean可能是多变的，所以传入的数据为List<T>。
-#####(2).BaseAdapter中需要实现的方法
+##### (2).BaseAdapter中需要实现的方法
 ```java
  @Override
     public int getCount() {
@@ -189,14 +189,14 @@ base-adapter-helper 是对我们传统的BaseAdapter的ViewHolder的模式的一
 2.	实现了getView方法，而对外公布了`convert(helper, item)`。convert的参数一个是`BaseAdapterHelper`和`Bean`，恰好`BaseAdapterHelper`中封装了各种为View赋值的方法，值肯定在`Bean`中取，所以公布这个方法还是极其方便的。
 3.	`convert(helper, item)`这个helper为`BaseAdapterHelper`类型，通过`getAdapterHelper`提供，这里可以用于扩展BaseAdapterHelper子类。关于`getAdapterHelper`的实现见`QuickAdapter`。
 
-####3.2.2 QucikAdapter.java 
+#### 3.2.2 QucikAdapter.java 
 这个类中没什么代码，主要用于提供一个快速使用的Adapter。一般情况下直接用此类作为Adapter即可，但是如果你扩展了`BaseAdapterHelper`，可能就需要自己去继承`BaseAdapterHelper`实现自己的Adapter。所以该类，对于`getAdapterHelper`直接返回了`BaseAdapterHelper`。
 ```java
  protected BaseAdapterHelper getAdapterHelper(int position, View convertView, ViewGroup parent) {
         return BaseAdapterHelper.get(context, convertView, parent, layoutResId, position);
     }
 ```
-####3.2.3 EnhancedQuickAdapter.java 
+#### 3.2.3 EnhancedQuickAdapter.java 
 这个类仅仅是为convert方法添加了一个参数`itemChanged`用于区分dataset changed / dataset invalidated。
 ```java
  @Override
@@ -211,13 +211,13 @@ base-adapter-helper 是对我们传统的BaseAdapter的ViewHolder的模式的一
 
 可以看到它的实现是通过helper.associatedObject的`equals()`方法，associatedObject的即我们的bean。在`BaseQuickAdapter`可以看到其赋值的代码。
 
-####3.2.4 BaseAdapterHelper.java 
+#### 3.2.4 BaseAdapterHelper.java 
 该类的功能：
 
 1. 充当了我们的ViewHolder角色，保存convertView中子View的引用，和convertView通过tag关联；
 2. 提供了一堆辅助方法，用于为View赋值和设置事件。
 
-#####(1).构造相关方法 
+##### (1).构造相关方法 
 ```java
 protected BaseAdapterHelper(Context context, ViewGroup parent, int layoutId, int position) {
         this.context = context;
@@ -256,7 +256,7 @@ protected BaseAdapterHelper(Context context, ViewGroup parent, int layoutId, int
 1.	首先如果`convertView==null`，我们需要去通过`LayoutInflater`去inflate一个布局文件，返回我们的`convertView`。看上面的构造方法，的确是inflate了一个布局作为我们的`convertView`，并且完成对context,postion的赋值，由于我们这里并不会为每个Item的布局去编写ViewHolder，该类充当了一个万能的ViewHolder的角色，所以存储`convertView`子View的引用，使用了`SparseArray<View>`，最后将`convertView`与`BaseAdapterHelper`通过`tag`关联。
 2.	如果`convertView!=null`，直接通过`tag`获取到我们关联的`BaseAdapterHelper`，更新position后返回。
 
-#####(2).几个重要的方法 
+##### (2).几个重要的方法 
 一般情况下，我们在`Adapter`的`convert`方法中拿到`BaseAdapterHelper`是通过`getView(int viewId)`拿到该`View`，然后进行赋值，使用如下代码：
 ```java
  public <T extends View> T getView(int viewId) {
@@ -275,7 +275,7 @@ protected BaseAdapterHelper(Context context, ViewGroup parent, int layoutId, int
 ```
 通过viewId去我们的views中进行寻找，找到则返回，找不到则添加并返回。每个`convertView`对应于一个`BaseAdapterHelper`，每个`BaseAdapterHelper`中包含一个`views`，`views`中保持`convertView`的子View的引用。
 
-#####(3).辅助方法
+##### (3).辅助方法
 一般情况下，通过`getView(int viewId)`拿到该`View`，然后进行赋值就可以了。但是此框架考虑：既然是拿到View然后赋值，不如我提供一些赋值的辅助方法。于是产生了一堆类似`setText(int viewId, String value)`的代码，内部首先通过viewId找到该View，转为`TextView`然后调用`setText(value)`。具体代码如下：
 
 ```java
@@ -456,6 +456,6 @@ public BaseAdapterHelper setText(int viewId, String value) {
 当然了，这里仅仅几个常用的方法，如果有些控件的方法这里没有封装，你就需要通过`BaseAdapterHelper.getView(viewId)`拿到控件，然后去设置事件。
 
 
-###4. 杂谈
+### 4. 杂谈
 
 

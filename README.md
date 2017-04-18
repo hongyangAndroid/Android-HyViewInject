@@ -117,11 +117,11 @@ public class BeanAdaper extends ArrayAdapter<Bean>
 
 ```
 
-#启用编译时注解
+# 启用编译时注解
 ![Sample Screenshots][2]
 按照上图步骤，启动即可。
 
-#关于我
+# 关于我
 
 [我的博客地址][3]
 
